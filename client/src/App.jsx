@@ -44,44 +44,68 @@ function SignIn() {
   };
 
   return (
-    <form onSubmit={submit} className="main" style={{ maxWidth: 380, marginTop: 40 }}>
-      <h1 className="edit">Real cost.</h1>
-      <p className="micro" style={{ marginBottom: 20 }}>Habit Intelligence</p>
-      <label className="micro">
-        Email
-        <input
-          type="email"
-          required
-          placeholder="your@email.com"
-          value={f.email}
-          onChange={(e) => setF({ ...f, email: e.target.value })}
-          style={inp}
-        />
-      </label>
-      <label className="micro">
-        Password
-        <input
-          type="password"
-          required
-          minLength={8}
-          placeholder="Minimum 8 characters"
-          value={f.password}
-          onChange={(e) => setF({ ...f, password: e.target.value })}
-          style={inp}
-        />
-      </label>
-      {err && <p className="err" role="alert" style={{ marginBottom: 12 }}>{err}</p>}
-      <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
-        <button className="btn">{mode === 'login' ? 'Sign in' : 'Create account'}</button>
-        <button
-          type="button"
-          onClick={() => { setErr(''); setMode(mode === 'login' ? 'register' : 'login'); }}
-          style={{ background: 'none', border: 0, color: 'var(--muted)', cursor: 'pointer', fontSize: 13 }}
-        >
-          {mode === 'login' ? 'Need an account?' : 'Have an account?'}
+    <div style={{
+      minHeight: '100vh',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: 24,
+      background: 'var(--canvas)'
+    }}>
+      <form onSubmit={submit} style={{
+        width: '100%',
+        maxWidth: 400,
+        background: 'var(--surface)',
+        border: '1px solid var(--line)',
+        borderRadius: 'var(--radius)',
+        padding: '36px 32px',
+        boxShadow: '0 8px 30px rgba(0, 0, 0, 0.04)'
+      }}>
+        <div style={{ marginBottom: 28, textAlign: 'center' }}>
+          <h1 className="edit" style={{ fontSize: 36, margin: '0 0 6px' }}>Real cost.</h1>
+          <p className="micro" style={{ margin: 0, letterSpacing: '0.14em' }}>Habit Intelligence</p>
+        </div>
+
+        <label className="micro">
+          Email
+          <input
+            type="email"
+            required
+            placeholder="your@email.com"
+            value={f.email}
+            onChange={(e) => setF({ ...f, email: e.target.value })}
+            style={inp}
+          />
+        </label>
+        <label className="micro">
+          Password
+          <input
+            type="password"
+            required
+            minLength={8}
+            placeholder="Minimum 8 characters"
+            value={f.password}
+            onChange={(e) => setF({ ...f, password: e.target.value })}
+            style={inp}
+          />
+        </label>
+        {err && <p className="err" role="alert" style={{ marginBottom: 14, fontSize: 13 }}>{err}</p>}
+
+        <button className="btn" style={{ width: '100%', padding: '12px', fontSize: 14, fontWeight: 500, marginTop: 4 }}>
+          {mode === 'login' ? 'Sign in' : 'Create account'}
         </button>
-      </div>
-    </form>
+
+        <div style={{ marginTop: 18, textAlign: 'center' }}>
+          <button
+            type="button"
+            onClick={() => { setErr(''); setMode(mode === 'login' ? 'register' : 'login'); }}
+            style={{ background: 'none', border: 0, color: 'var(--muted)', cursor: 'pointer', fontSize: 13 }}
+          >
+            {mode === 'login' ? "Don't have an account? Sign up" : 'Already have an account? Sign in'}
+          </button>
+        </div>
+      </form>
+    </div>
   );
 }
 
@@ -104,7 +128,13 @@ export default function App() {
     qc.removeQueries();
   };
 
-  if (me.isLoading) return <div className="main"><div className="skeleton" /></div>;
+  if (me.isLoading) {
+    return (
+      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--canvas)' }}>
+        <div className="skeleton" style={{ width: 380, height: 260, borderRadius: 'var(--radius)' }} />
+      </div>
+    );
+  }
   if (me.isError || !me.data) return <SignIn />;
 
   return (
