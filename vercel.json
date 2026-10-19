@@ -1,7 +1,8 @@
 {
   "services": {
     "server": {
-      "root": "server"
+      "root": "server",
+      "entrypoint": "src/index.js"
     },
     "client": {
       "root": "client"
