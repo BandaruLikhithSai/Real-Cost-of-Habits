@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { NavLink, Routes, Route } from 'react-router-dom';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { Eye, EyeOff } from 'lucide-react';
 import { api } from './api.js';
 import Dashboard from './pages/Dashboard.jsx';
 import Expenses from './pages/Expenses.jsx';
@@ -26,6 +27,7 @@ function SignIn() {
   const qc = useQueryClient();
   const [mode, setMode] = useState('login');
   const [f, setF] = useState({ email: '', password: '' });
+  const [showPassword, setShowPassword] = useState(false);
   const [err, setErr] = useState('');
 
   const submit = async (e) => {
@@ -79,15 +81,38 @@ function SignIn() {
         </label>
         <label className="micro">
           Password
-          <input
-            type="password"
-            required
-            minLength={8}
-            placeholder="Minimum 8 characters"
-            value={f.password}
-            onChange={(e) => setF({ ...f, password: e.target.value })}
-            style={inp}
-          />
+          <div style={{ position: 'relative', margin: '6px 0 16px' }}>
+            <input
+              type={showPassword ? 'text' : 'password'}
+              required
+              minLength={8}
+              placeholder="Minimum 8 characters"
+              value={f.password}
+              onChange={(e) => setF({ ...f, password: e.target.value })}
+              style={{ ...inp, margin: 0, paddingRight: 42 }}
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              style={{
+                position: 'absolute',
+                right: 10,
+                top: '50%',
+                transform: 'translateY(-50%)',
+                background: 'none',
+                border: 0,
+                color: 'var(--muted)',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                padding: 4
+              }}
+              aria-label={showPassword ? 'Hide password' : 'Show password'}
+              title={showPassword ? 'Hide password' : 'Show password'}
+            >
+              {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+            </button>
+          </div>
         </label>
         {err && <p className="err" role="alert" style={{ marginBottom: 14, fontSize: 13 }}>{err}</p>}
 
