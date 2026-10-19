@@ -10,10 +10,14 @@ export async function connectDB() {
   if (cachedConnection && mongoose.connection.readyState === 1) {
     return cachedConnection;
   }
-  if (!process.env.MONGODB_URI) {
+  const uri = process.env.MONGODB_URI;
+  if (!uri) {
     throw new Error('Missing MONGODB_URI environment variable');
   }
-  cachedConnection = await mongoose.connect(process.env.MONGODB_URI);
+  cachedConnection = await mongoose.connect(uri, {
+    serverSelectionTimeoutMS: 5000,
+    connectTimeoutMS: 5000
+  });
   return cachedConnection;
 }
 
@@ -33,8 +37,8 @@ app.use(async (req, res, next) => {
     await connectDB();
     next();
   } catch (err) {
-    console.error('Database connection error:', err);
-    res.status(500).json({ error: { code: 'db_error', message: 'Failed to connect to database' } });
+    console.error('Database connection error:', err.message);
+    res.status(500).json({ error: { code: 'db_error', message: 'Database connection failed: ' + err.message } });
   }
 });
 
